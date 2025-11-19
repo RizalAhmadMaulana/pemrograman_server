@@ -17,12 +17,14 @@ Including another URLconf
 # code/simplelms/simplelms/urls.py
 
 from django.contrib import admin
-from django.urls import path, include  # <-- Wajib ada 'include'
-from core import views as core_views  # <-- Wajib ada jika ingin home view
+from django.urls import path, include
+from core import views as core_views
+from core.apiv1 import apiv1 
 
 urlpatterns = [
     path('', core_views.home, name='home'), 
     path('admin/', admin.site.urls),
     path('core/', include('core.urls')), 
     path('silk/', include('silk.urls', namespace='silk')),
+    path('api/v1/', apiv1.urls),
 ]

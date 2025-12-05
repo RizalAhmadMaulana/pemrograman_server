@@ -2,8 +2,11 @@ services:
   django:
     container_name: simple_lms
     build: .
-    command: python simplelms/manage.py runserver 0.0.0.0:8000
-    # command: python manage.py runserver 0.0.0.0:8000
+    # depends_on untuk memastikan DB mulai duluan
+    depends_on:
+      - postgres 
+    # command agar kontainer tetap hidup (IDLE)
+    command: sleep infinity 
     volumes:
       - ./code:/code
     ports:

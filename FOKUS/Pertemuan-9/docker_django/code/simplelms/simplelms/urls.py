@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 from core import views as core_views
 from core.apiv1 import apiv1 
+from core.apiv2 import apiv2
 
 urlpatterns = [
     path('', core_views.home, name='home'), 
@@ -27,4 +28,5 @@ urlpatterns = [
     path('core/', include('core.urls')), 
     path('silk/', include('silk.urls', namespace='silk')),
     path('api/v1/', apiv1.urls),
+    path('api/v2/', apiv2.urls),
 ]

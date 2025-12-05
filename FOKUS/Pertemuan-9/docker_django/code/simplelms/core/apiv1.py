@@ -4,7 +4,7 @@ import re
 from .models import User, CourseMember, CourseContent,Comment,Course
 from typing import List
 
-apiv1 = NinjaAPI()
+apiv1 = NinjaAPI(version="1.0.0")
 
 @apiv1.get('/hello')
 def helloApi(request):
@@ -93,7 +93,7 @@ def register(request, data:Register):
         if len(value) < 8:
             raise ValueError("Password harus lebih dari 8 karakter")
         
-        pattern = r'^(?=.*[A-Za-z])(?=.*\d).+$'
+        pattern = r'^(?=.[A-Za-z])(?=.\d).+$'
         if not re.match(pattern, value):
             raise ValueError("Password harus mengandung huruf dan angka")
 

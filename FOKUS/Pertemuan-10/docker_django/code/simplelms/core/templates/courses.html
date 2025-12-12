@@ -67,20 +67,16 @@
         const sort = document.getElementById("sort").value;
         const perPage = parseInt(document.getElementById("per_page").value);
 
-        // === HITUNG SKIP & LIMIT ===
         const skip = (page - 1) * perPage;
         const limit = perPage;
 
-        // === PERBAIKAN 1: Gunakan Path Relatif (Tanpa http://localhost) ===
-        // Ini agar script jalan di port 8000, 8001, atau berapapun.
         let url = `/api/v2/courses?skip=${skip}&limit=${limit}&sort=${sort}`;
 
-        // === PERBAIKAN 2: Tambahkan tanda kutip string yang benar ===
         if (search.trim() !== "") {
             url += `&search=${search}`;
         }
 
-        console.log("Fetching URL:", url); // Cek URL di Console Browser
+        console.log("Fetching URL:", url);
 
         fetch(url)
             .then(res => {
@@ -109,20 +105,16 @@
                     `;
                 });
 
-                // === PAGINATION BUILDER ===
                 const pagination = document.getElementById("pagination");
                 pagination.innerHTML = "";
 
-                // Hitung total halaman (Safe check biar tidak error division by zero)
                 const totalItems = data.total || 0;
                 const totalPages = Math.ceil(totalItems / perPage);
 
-                // Tombol Prev
                 if (page > 1) {
                     pagination.innerHTML += `<button onclick="loadCourses(${page - 1})">Prev</button>`;
                 }
 
-                // Tombol Angka Halaman
                 for (let i = 1; i <= totalPages; i++) {
                     pagination.innerHTML += `
                         <button onclick="loadCourses(${i})"
@@ -132,7 +124,6 @@
                     `;
                 }
 
-                // Tombol Next
                 if (page < totalPages) {
                     pagination.innerHTML += `<button onclick="loadCourses(${page + 1})">Next</button>`;
                 }

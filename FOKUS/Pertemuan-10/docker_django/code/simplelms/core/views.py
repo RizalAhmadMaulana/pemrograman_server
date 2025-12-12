@@ -154,6 +154,5 @@ def courseMemberStat(request):
     return JsonResponse(result)
 
 def home(request):
-    """Menampilkan pesan selamat datang di halaman utama."""
     return HttpResponse("<h1>Selamat Datang di SimpleLMS!</h1><p>Akses /admin/ atau /core/ untuk melihat fitur.</p>")
 

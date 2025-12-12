@@ -1,5 +1,3 @@
-# File: docker_django/code/simplelms/core/apiv2.py
-
 from typing import Any, List, Optional
 from ninja import NinjaAPI, Schema, Query
 from ninja.pagination import PaginationBase, paginate
@@ -63,8 +61,8 @@ class CustomPagination(PaginationBase):
 api_v2 = NinjaAPI(
     title="SimpleLMS API v2",
     version="2.0.0",
-    throttle=SimpleRateThrottle(),   # <--- Throttling Aktif Global
-    urls_namespace="api_v2" # Penting agar tidak bentrok dengan v1
+    throttle=SimpleRateThrottle(), 
+    urls_namespace="api_v2"
 )
 
 # JWT auth router
@@ -112,7 +110,6 @@ def post_comment(request, data: CommentIn):
     if not content:
         return {"success": False, "comment_id": None, "error": "Content not found"}
 
-    # Pastikan user ikut course
     member = CourseMember.objects.filter(user_id=user, course_id=content.course_id)
     if not member.exists():
         return {"success": False, "comment_id": None, "error": "Tidak boleh komentar di sini"}

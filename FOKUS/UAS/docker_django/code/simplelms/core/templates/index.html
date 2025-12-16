@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>{{ title|default:"Dashboard SimpleLMS" }}</title>
     
     <style>
         /* --- COLOR PALETTE --- */
@@ -125,30 +125,50 @@
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
             font-weight: 900;
             animation: fadeInDown 1s ease-out; 
+            margin-bottom: 20px;
         }
         .hero p {
             font-size: 1.3em;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
+        
+        .cta-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px; /* Jarak antar tombol */
+        }
+
         .btn-cta {
             background-color: #f1c40f; 
             color: var(--secondary-color);
-            padding: 18px 40px; 
+            padding: 15px 35px; /* Sedikit dikecilkan agar muat banyak */
             border-radius: 50px; 
             font-weight: 800;
             letter-spacing: 1px;
             box-shadow: 0 8px #d4ac0d;
             transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px; /* Jarak aman tambahan untuk mobile */
+        }
+        .btn-cta:hover {
+            background-color: #f39c12;
+            transform: translateY(-3px);
+            color: white;
         }
         .btn-cta:active {
-            transform: translateY(8px);
-            box-shadow: none;
+            transform: translateY(4px);
+            box-shadow: 0 2px #d4ac0d;
         }
 
         /* --- STATS CARD SECTION --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsif */
             gap: 30px;
             margin-top: 40px; 
             position: relative;
@@ -209,9 +229,10 @@
         }
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
             gap: 30px;
             text-align: center;
+            padding: 0 20px;
         }
         .feature-card {
             padding: 30px;
@@ -325,15 +346,17 @@
             background-color: var(--secondary-color); 
             color: rgba(255, 255, 255, 0.8);
             padding: 40px 0;
-            margin-top: 60px; 
+            margin-top: 40px; 
             font-size: 0.9em;
         }
         .footer-content {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap; /* Agar responsif */
             max-width: 1200px;
             margin: auto;
             padding: 0 20px;
+            gap: 20px;
         }
         .footer-section h4 {
             color: var(--primary-color); 
@@ -364,15 +387,17 @@
         <div class="logo">📚 SimpleLMS</div>
         <div class="nav-links">
             <a href="{% url 'admin:index' %}">Admin Panel</a>
+            
             <div class="dropdown">
-                <span class="dropdown-button">API Data</span>
+                <span class="dropdown-button">Data Reports</span>
                 <div class="dropdown-content">
-                    <a href="{% url 'api_all_courses' %}">Semua Courses</a>
-                    <a href="{% url 'api_user_courses' %}">User Courses</a>
-                    <a href="{% url 'api_course_stats' %}">Statistik Courses</a>
+                    <a href="{% url 'api_all_courses' %}">Tabel Semua Course</a>
+                    <a href="{% url 'api_user_courses' %}">Tabel User & Course</a>
+                    <a href="{% url 'api_course_stats' %}">Statistik Harga</a>
                     <a href="{% url 'api_member_stats' %}">Statistik Member</a>
                 </div>
             </div>
+            
             <a href="{% url 'silk:requests' %}">Profiling Silk</a>
         </div>
     </div>
@@ -381,7 +406,14 @@
         <h1>🚀 Temukan Ilmu Baru, Mulai Sekarang.</h1>
         <p>Akses semua mata kuliah berkualitas tinggi yang diajarkan oleh para ahli. Platform belajar Anda, SimpleLMS.</p>
         
-        <a href="{% url 'admin:index' %}" class="btn-cta">Lihat Dashboard Admin</a>
+        <div class="cta-container">
+            <a href="{% url 'view_courses' %}" class="btn-cta" style="background-color: #00c54f;">🎓 Courses View</a>
+            <a href="{% url 'view_users' %}" class="btn-cta">👥 Users View</a>
+            
+            <a href="/api/v1/docs" class="btn-cta" style="background-color: #3498db;">📚 Docs API V1</a>
+            <a href="/api/v2/docs" class="btn-cta" style="background-color: #e74c3c;">🚀 Docs API V2</a>
+            <a href="/api/v2/openapi.json" target="_blank" class="btn-cta" style="background-color: #8e44ad;">📄 JSON Schema</a>
+        </div>
     </div>
     
     <div class="container">
@@ -465,7 +497,7 @@
                 </div>
             </div>
             {% empty %}
-            <p>Tidak ada mata kuliah yang ditemukan.</p>
+            <p style="text-align: center; font-style: italic;">Belum ada mata kuliah yang tersedia di database.</p>
             {% endfor %}
         </div>
     </div>
@@ -482,8 +514,9 @@
                 <h4>Akses Cepat</h4>
                 <div class="footer-links">
                     <a href="{% url 'admin:index' %}">Dashboard Admin</a>
-                    <a href="{% url 'api_all_courses' %}">Semua Data API</a>
-                    <a href="{% url 'silk:requests' %}">Profiling Silk</a>
+                    <a href="{% url 'api_all_courses' %}">Tabel Courses</a>
+                    <a href="{% url 'api_course_stats' %}">Statistik</a>
+                    <a href="/api/v2/docs">Docs API v2</a>
                 </div>
             </div>
 

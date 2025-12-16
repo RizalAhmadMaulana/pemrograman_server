@@ -6,6 +6,36 @@ from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 
+def api_all_courses(request):
+    courses = Course.objects.select_related('teacher').all()
+    return render(request, 'all_courses.html', {'courses': courses})
+
+def api_user_courses(request):
+    members = CourseMember.objects.select_related('user_id', 'course_id').all()
+    return render(request, 'user_courses.html', {'members': members})
+
+def api_course_stats(request):
+    stats = Course.objects.aggregate(
+        total_courses=Count('id'),
+        avg_price=Avg('price'),
+        max_price=Max('price'),
+        min_price=Min('price')
+    )
+    
+    if stats['avg_price'] is not None:
+        stats['avg_price'] = int(stats['avg_price'])
+
+    return render(request, 'stats_courses.html', {'stats': stats})
+
+def api_member_stats(request):
+    total_members = CourseMember.objects.count()
+    role_stats = CourseMember.objects.values('roles').annotate(total=Count('id'))
+    
+    return render(request, 'stats_members.html', {
+        'total_members': total_members,
+        'role_stats': role_stats
+    })
+
 def index_courses(request):
     return render(request, 'courses.html')
 
